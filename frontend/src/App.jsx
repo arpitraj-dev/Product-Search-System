@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './components/Navbar';
@@ -9,10 +10,17 @@ import ProductDetailsPage from './pages/ProductDetailsPage';
 import ProductsPage from './pages/ProductsPage';
 import CategoriesPage from './pages/CategoriesPage';
 import { Toaster } from 'react-hot-toast';
+import { Menu } from 'lucide-react';
 
 function AppContent() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  // Close mobile sidebar on route transition
+  useEffect(() => {
+    setMobileSidebarOpen(false);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col relative overflow-hidden text-slate-100">
@@ -40,10 +48,28 @@ function AppContent() {
         
         <div className="flex flex-1 relative z-20">
           {/* Admin Sidebar */}
-          {isAdminRoute && <Sidebar />}
+          {isAdminRoute && (
+            <Sidebar 
+              isOpen={mobileSidebarOpen} 
+              onClose={() => setMobileSidebarOpen(false)} 
+            />
+          )}
           
           {/* Main Content Area with Page transitions */}
           <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full overflow-y-auto relative z-10">
+            {/* Hamburger toggle button for admin pages on mobile */}
+            {isAdminRoute && (
+              <div className="md:hidden mb-6 flex items-center">
+                <button
+                  onClick={() => setMobileSidebarOpen(true)}
+                  className="inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-slate-900/80 backdrop-blur-md border border-white/10 text-slate-300 hover:text-white cursor-pointer hover:bg-white/5 active:scale-95 transition-all shadow-md shadow-black/20"
+                  title="Open Control Panel"
+                >
+                  <Menu className="w-4.5 h-4.5 text-indigo-400" />
+                  <span className="text-xs font-bold uppercase tracking-wider">Control Panel</span>
+                </button>
+              </div>
+            )}
             <AnimatePresence mode="wait">
               <motion.div
                 key={location.pathname}
@@ -64,7 +90,7 @@ function AppContent() {
           </main>
         </div>
         {/* Global footer */}
-        <Footer />
+        <Footer className={isAdminRoute ? 'mt-0' : 'mt-16'} />
       </div>
       
       {/* Toast notifications */}
