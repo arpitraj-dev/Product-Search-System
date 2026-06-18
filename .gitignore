@@ -1,0 +1,51 @@
+# ===========================
+# Build output
+# ===========================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ===========================
+# IDE files
+# ===========================
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+.factorypath
+bin/
+
+# ===========================
+# Maven
+# ===========================
+.mvn/
+mvnw
+mvnw.cmd
+
+# ===========================
+# OS generated files
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===========================
+# Logs
+# ===========================
+*.log
+logs/
+
+# ===========================
+# Sensitive / Environment files
+# ===========================
+.env
+application-local.properties
+application-secret.properties
