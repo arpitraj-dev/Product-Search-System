@@ -1,7 +1,5 @@
--- ============================================
--- Product Search System — MySQL Schema (Phase 3)
--- Normalized with categories table
--- ============================================
+
+-- Product Search System — MySQL Schema 
 
 -- 1. Create the database
 CREATE DATABASE IF NOT EXISTS product_search_db
