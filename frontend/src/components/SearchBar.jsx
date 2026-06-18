@@ -7,6 +7,7 @@ export default function SearchBar({ value, onSearch, placeholder = 'Search produ
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef(null);
 
   // Sync prop value
@@ -54,6 +55,11 @@ export default function SearchBar({ value, onSearch, placeholder = 'Search produ
     return () => clearTimeout(delayDebounce);
   }, [input]);
 
+  // Reset active index when suggestions list updates
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [suggestions]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSearch(input.trim());
@@ -83,6 +89,26 @@ export default function SearchBar({ value, onSearch, placeholder = 'Search produ
     setShowSuggestions(false);
   };
 
+  // Keyboard navigation handler
+  const handleKeyDown = (e) => {
+    if (!showSuggestions || suggestions.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : 0));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex((prev) => (prev > 0 ? prev - 1 : suggestions.length - 1));
+    } else if (e.key === 'Enter') {
+      if (activeIndex >= 0 && activeIndex < suggestions.length) {
+        e.preventDefault();
+        handleSuggestionClick(suggestions[activeIndex].name);
+      }
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false);
+    }
+  };
+
   return (
     <div ref={containerRef} className="relative w-full transition-transform duration-300 ease-out focus-within:scale-[1.015]">
       <form onSubmit={handleSubmit} className="relative w-full group">
@@ -98,6 +124,7 @@ export default function SearchBar({ value, onSearch, placeholder = 'Search produ
           type="text"
           value={input}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           onFocus={() => setShowSuggestions(true)}
           placeholder={placeholder}
           className={`w-full pl-12 pr-12 bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/15 focus:border-indigo-500 transition-all shadow-md focus:shadow-[0_0_50px_rgba(99,102,241,0.15)] ${
@@ -123,24 +150,36 @@ export default function SearchBar({ value, onSearch, placeholder = 'Search produ
       </form>
 
       {/* Autocomplete Dropdown List */}
-      {showSuggestions && input.length >= 2 && (suggestions.length > 0 || loadingSuggestions) && (
+      {showSuggestions && input.length >= 2 && (suggestions.length > 0 || (loadingSuggestions && suggestions.length === 0)) && (
         <div className="absolute left-0 w-full bg-slate-950/80 backdrop-blur-xl border border-white/8 rounded-xl shadow-2xl mt-2 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-          <ul className="divide-y divide-white/5 my-0 py-1 pl-0 list-none">
-            {suggestions.map((item) => (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  onClick={() => handleSuggestionClick(item.name)}
-                  className="w-full text-left px-4 py-3 hover:bg-white/5 text-slate-200 font-semibold text-xs sm:text-sm flex items-center justify-between cursor-pointer transition-colors"
-                >
-                  <span>{item.name}</span>
-                  <span className="text-[10px] bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-bold border border-white/5">
-                    in {item.categoryName}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
+          {loadingSuggestions && suggestions.length === 0 ? (
+            <div className="px-4 py-3 text-xs text-slate-400 flex items-center gap-2">
+              <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-400" />
+              <span>Looking for matches...</span>
+            </div>
+          ) : (
+            <ul className="divide-y divide-white/5 my-0 py-1 pl-0 list-none">
+              {suggestions.map((item, index) => {
+                const isActive = index === activeIndex;
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      onClick={() => handleSuggestionClick(item.name)}
+                      className={`w-full text-left px-4 py-3 text-slate-200 font-semibold text-xs sm:text-sm flex items-center justify-between cursor-pointer transition-colors ${
+                        isActive ? 'bg-white/10 text-indigo-400' : 'hover:bg-white/5'
+                      }`}
+                    >
+                      <span>{item.name}</span>
+                      <span className="text-[10px] bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full font-bold border border-white/5">
+                        in {item.categoryName}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       )}
     </div>

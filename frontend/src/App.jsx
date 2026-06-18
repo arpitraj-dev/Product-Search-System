@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import ProductDetailsPage from './pages/ProductDetailsPage';
@@ -62,6 +63,8 @@ function AppContent() {
             </AnimatePresence>
           </main>
         </div>
+        {/* Global footer */}
+        <Footer />
       </div>
       
       {/* Toast notifications */}
