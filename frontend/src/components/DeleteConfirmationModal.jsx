@@ -1,8 +1,9 @@
+import { createPortal } from 'react-dom';
 import { AlertTriangle, X } from 'lucide-react';
 
 export default function DeleteConfirmationModal({ title, message, onConfirm, onCancel }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop overlay */}
       <div className="fixed inset-0 bg-black/75 backdrop-blur-sm" onClick={onCancel} />
       
@@ -39,6 +40,8 @@ export default function DeleteConfirmationModal({ title, message, onConfirm, onC
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
+

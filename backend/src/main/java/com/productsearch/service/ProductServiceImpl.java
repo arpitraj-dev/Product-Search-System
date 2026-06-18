@@ -98,6 +98,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = findProductOrThrow(id);
         productRepository.delete(product);
+        productRepository.resetAutoIncrement();
 
         log.info("Product deleted successfully with id: {}", id);
     }

@@ -77,6 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = findCategoryOrThrow(id);
         categoryRepository.delete(category);
+        categoryRepository.resetAutoIncrement();
 
         log.info("Category deleted successfully with id: {}", id);
     }

@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { X, Save, AlertCircle } from 'lucide-react';
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 export default function ProductForm({
   product = null,
@@ -42,8 +43,8 @@ export default function ProductForm({
     await onSubmit(payload);
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop overlay */}
       <div className="fixed inset-0 bg-black/75 backdrop-blur-sm" onClick={onCancel} />
       
@@ -187,6 +188,8 @@ export default function ProductForm({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
+

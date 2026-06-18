@@ -38,7 +38,7 @@ function AppContent() {
         {/* Sticky Glass Navbar */}
         <Navbar />
         
-        <div className="flex flex-1">
+        <div className="flex flex-1 relative z-20">
           {/* Admin Sidebar */}
           {isAdminRoute && <Sidebar />}
           
