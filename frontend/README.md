@@ -89,24 +89,54 @@ frontend/src/
 
 ---
 
-## 🚀 Execution & Build Reference
+## 📦 Deliverables
 
-### 1. Installation
-Run the package script inside the frontend folder:
+This folder contains the React client SPA codebase along with the following deliverables:
+
+### 1. Setup and Run Instructions
+
+#### Prerequisites
+- **Node.js 18+** & **npm**
+- A running instance of the Spring Boot backend service on `http://localhost:8080`.
+
+#### Build and Launch Steps
+Execute the following commands inside the `frontend/` folder:
 ```bash
+# 1. Install local dependencies
 npm install
-```
 
-### 2. Run Local Development Server
-Launch the hot-reloader:
-```bash
+# 2. Run the development environment hot-reloader
 npm run dev
 ```
 👉 *Open browser window to **http://localhost:5173***.
 
-### 3. Compile Production Bundle
-Bundle assets for static deployment:
+#### Compile Production Bundles
+To compile and test static builds:
 ```bash
 npm run build
 ```
-*Vite compiles and places optimized HTML, CSS, and JS chunks in the `/dist` folder.*
+*Vite packages code assets into optimized chunks located in the `/dist` output folder.*
+
+---
+
+### 2. Technology Stack Used
+
+- **React 19** & **Vite** (Core runtime and bundle compilation)
+- **Tailwind CSS v4** (Utility class styles engine)
+- **Framer Motion** (Stagger-loading card lists and page route slides)
+- **React Router DOM 7** (Clean routing mappings)
+- **React Hook Form 7** (Inputs state validation tracking)
+- **React Hot Toast** (Alert popup layers)
+- **React Portals** (Mount overlays to `document.body` to avoid stacking constraints)
+- **Axios** (Promise-based HTTP request client connecting to backend service APIs)
+
+---
+
+### 3. Any Assumptions Made During Development
+
+1. **Stacking Context Isolation**: Assumed layout overlays (product/category forms and delete popups) must be rendered in Portals to escape parent container stacking contexts, resolving potential sticky navbar/footer overlaps.
+2. **Debounced Completion Lookup**: Assumed a 200ms delay inside suggestion autocompletes is sufficient to balance input responsiveness with network load.
+3. **Admin Drawer Transitions**: Assumed mobile sidebar controls must act as sliding drawers (`transform transition-transform duration-300 ease-out`) with translucent blurred backdrops.
+4. **Offline Layout Support**: Assumed missing API connections will throw standard Axios network rejects handled cleanly by toast notifications without crashing the browser view.
+5. **View Mode Memory**: Assumed grid/table toggles reside on component memory state, defaulting to list rows on initial page load.
+

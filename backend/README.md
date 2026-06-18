@@ -42,57 +42,68 @@ Instead of compiling raw SQL queries, search queries are compiled programmatical
   * Resolves partial, case-insensitive matches using criteria builders: `criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + keyword.toLowerCase() + "%")`.
   * Returns combined arrays using `criteriaBuilder.and(...)` back to the root query executor, integrating sort direction strings (`asc`/`desc`) dynamically.
 
-
 ---
 
-## ⚙ Core Implementation Highlights
+## 📦 Deliverables
 
-### 1. Dynamic Query Specification Engine
-Instead of writing static SQL queries or custom repository method parameters, searches are built dynamically using JPA specifications:
-- **String Queries**: Partial string matching using `criteriaBuilder.like(criteriaBuilder.lower(root.get("field")), "%" + term + "%")`.
-- **Category Grouping**: Category ID filtering via `criteriaBuilder.equal(root.get("category").get("id"), categoryId)`.
-- **Directional Sorting**: PageRequest arguments configured with Sort parameters matching columns like `createdAt`, `price`, or `name`.
+This folder contains the Java Maven microservice backend codebase along with the following deliverables:
 
-### 2. Auto-Increment Sequence Reset Mechanism
-When database deletions occur, ID sequences can skip numbers. To keep record IDs clean, the repository executes native queries on category or product removal:
-```java
-@Modifying
-@Transactional
-@Query(value = "ALTER TABLE categories AUTO_INCREMENT = 1", nativeQuery = true)
-void resetAutoIncrement();
-```
-- Called automatically during cascade operations in the service implementations to ensure subsequent records inherit the next logical sequential index.
+### 1. Setup and Run Instructions
 
-### 3. Comprehensive Global Exception Handler
-Uncaptured exceptions are caught by a global advisor using `@RestControllerAdvice`, converting stack traces into structured JSON templates:
-- **Validation Errors (400 Bad Request)**: Triggered when input criteria fails validation, returning field-specific validation reports.
-- **Not Found Errors (404 Not Found)**: Raised when requesting non-existent resource IDs.
-
----
-
-## 🚀 Setup & Execution
-
-### Prerequisites
-- **Java 21 JDK**
-- **Apache Maven 3.9**
+#### Prerequisites
+- **Java 21 JDK** or higher
+- **Apache Maven 3.9+**
 - **MySQL 8.0**
 
-### Environment Configuration
-The database parameters are loaded via the `spring-dotenv` package. Configure a `.env` file at the parent workspace root:
-```env
-DB_URL=jdbc:mysql://localhost:3306/product_search_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
+#### Database Schema Setup
+Ensure your MySQL engine is running and configure the schema:
+```sql
+CREATE DATABASE IF NOT EXISTS product_search_db
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
 ```
 
-### Maven Scripts
+#### Environment Variables Configuration
+The application reads database parameters from a `.env` file at the project root directory. Verify it contains your SQL credentials:
+```env
+DB_URL=jdbc:mysql://localhost:3306/product_search_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+DB_USERNAME=your_mysql_username
+DB_PASSWORD=your_mysql_password
+```
 
-| Script Command | Target Goal |
+#### Compile and Run Maven Commands
+Execute these maven commands inside the `backend/` folder:
+
+| Script Command | Goal / Description |
 | :--- | :--- |
-| `mvn clean compile` | Cleans target logs and compiles source files. |
-| `mvn test` | Runs Unit testing profiles using an H2 database. |
-| `mvn package` | Prepares executable compilation packages (`.jar` bundle). |
-| `mvn spring-boot:run` | Launches the server at **http://localhost:8080**. |
+| `mvn clean compile` | Cleans build artifacts and compiles source resources |
+| `mvn test` | Runs Unit tests against the H2 in-memory profile |
+| `mvn package` | Prepares compiled packages as an executable `.jar` bundle |
+| `mvn spring-boot:run` | Boots up the Tomcat API server on **http://localhost:8080** |
+
+👉 Interactive API sandbox maps to **http://localhost:8080/swagger-ui.html**.
+
+---
+
+### 2. Technology Stack Used
+
+- **Java 21 JDK**
+- **Spring Boot 3.4.1** (REST Web services core framework)
+- **Spring Data JPA** (MySQL 8 database connector via Hibernate ORM)
+- **Spring Validation** (Request payload validation using JSR annotations)
+- **Spring Dotenv** (Loads credentials from root `.env` files)
+- **Swagger / OpenAPI 3** (REST API browser and testing tool)
+- **MySQL 8** (Persistent database storing products catalog and categories)
+
+---
+
+### 3. Any Assumptions Made During Development
+
+1. **Transactional Boundaries**: Assumed transactional operations (like category removal cascading) should run inside isolated transaction boundaries (`@Transactional`) to guarantee database consistency.
+2. **Auto-Increment Sequential Contiguity**: Assumed that resetting the auto-increment counter (`ALTER TABLE AUTO_INCREMENT = 1`) on deletions is desirable to maintain clean sequential IDs.
+3. **Cascading Delete Path**: Assumed that deleting a category must perform a cascade delete on all associated products in the database to prevent orphaned records.
+4. **Dynamic Query Pagination Defaulting**: Assumed that search queries without explicit parameters should default to page 0 and limit 10 sorted by creation date descending.
+5. **stateless query execution**: Assumed REST resource endpoints are fully stateless; security configurations and CORS variables allow all frontend connections.
 
 ---
 
@@ -162,3 +173,4 @@ DB_PASSWORD=your_password
   "timestamp": "2026-06-18T11:01:00Z"
 }
 ```
+

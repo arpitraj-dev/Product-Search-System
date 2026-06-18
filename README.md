@@ -88,64 +88,116 @@ The relational database consists of two normalized tables linked via a One-to-Ma
 
 ---
 
-## 🛠 Tech Stack
+## 📦 Deliverables
 
-### Frontend Client
-- **React 19 (Vite)**: Structured UI engine.
-- **Tailwind CSS v4**: Styling framework.
-- **Framer Motion**: Smooth animations.
-- **React Router DOM 7**: Clean routing.
-- **React Hook Form**: Form inputs validation.
-- **React Hot Toast**: Action notification overlays.
-- **React Portals**: Modal elements mounted outside stacking context.
+This repository contains the complete full-stack project codebase along with the following deliverables:
 
-### Backend API
-- **Java 21 & Spring Boot 3.4.1**: Enterprise microservices core.
-- **Spring Data JPA**: MySQL connector.
-- **JPA Specifications**: Compilation-safe dynamic SQL generation.
-- **Swagger UI (OpenAPI 3)**: Interactive endpoints testing sandbox.
-- **Spring Dotenv**: Environment variables manager.
-- **MySQL**: Relational database used for persistent data storage, querying, and transaction management.
+### 1. Setup and Run Instructions
 
----
+#### Prerequisites
+- **Java 21 JDK** or higher
+- **Node.js 18+** & **npm**
+- **MySQL 8.0**
+- **Maven 3.9+**
 
-## 🚀 Installation & Local Execution
-
-### Step 1: Database Setup
-Launch your MySQL server instance and run:
+#### Database Configuration
+Open your local MySQL database engine client and run:
 ```sql
 CREATE DATABASE IF NOT EXISTS product_search_db
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 ```
 
-### Step 2: Ingest Environment Variables
-Copy `.env.example` to `.env` in the root folder and input your MySQL configuration:
+#### Environment Configuration
+Copy the `.env.example` file located at the parent root directory into a new file named `.env`, and customize your credentials:
 ```env
 DB_URL=jdbc:mysql://localhost:3306/product_search_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
 DB_USERNAME=your_mysql_username
 DB_PASSWORD=your_mysql_password
 ```
 
-### Step 3: Start the Backend Server
+#### Running the Backend API
 ```bash
 cd backend
 mvn spring-boot:run
 ```
-- The backend API boots on **http://localhost:8080**.
-- Swagger UI sandbox is available at **http://localhost:8080/swagger-ui.html**.
+- The backend API server starts at **http://localhost:8080**.
+- Swagger UI API documentation and interactive testing sandbox are accessible at **http://localhost:8080/swagger-ui.html**.
 
-### Step 4: Start the Frontend Client
+#### Running the Frontend Client
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-- The React application opens on **http://localhost:5173**.
+- The React development application runs at **http://localhost:5173**.
 
 ---
 
-## 📂 Project Directory Structure
+### 2. Technology Stack Used
+
+#### Backend Core Services
+- **Java 21** & **Spring Boot 3.4.1**
+- **Spring Data JPA** (MySQL Hibernate connector)
+- **Spring Validation** (Request body validation annotations)
+- **Spring Dotenv** (Loads credentials from `.env` files)
+- **Swagger UI / OpenAPI 3** (Interactive REST endpoint testing browser)
+- **MySQL** (Relational database for catalog storage and transaction management)
+
+#### Frontend User Interface
+- **React 19** & **Vite** (Bundler & local dev server)
+- **Tailwind CSS v4** (Modern utility styling system)
+- **Framer Motion** (Stagger-loading card list animations)
+- **React Router DOM 7** (Declarative route path mappings)
+- **React Hook Form** (Form validation state management)
+- **React Portals** (Mounting layout overlays outside parent CSS boundaries)
+
+---
+
+### 3. Any Assumptions Made During Development
+
+1. **Decoupled Stacking Contexts**: Assumed overlay UI items (modals/forms) must be isolated from parent layout branches to prevent clipping. Used React Portals (`createPortal`) to guarantee elements stack cleanly over header and footer.
+2. **Cascading Delete Behaviors**: Assumed that deleting a Product Category should automatically remove all products under that category in the catalog to maintain database integrity. Implemented using standard database cascading rules.
+3. **Database Index Resets**: Assumed it is desirable to reset the table sequence auto-increment indices to the lowest available sequential number (`ALTER TABLE AUTO_INCREMENT = 1`) on deletions to keep IDs contiguous.
+4. **Stateless Pagination**: Assumed all queries with pagination parameters are stateless. Empty queries default to returning all catalog items paginated.
+5. **Debounce Delay Throttling**: Assumed a 200ms input debounce delay inside search queries is optimal to balance suggestion latency and avoid database load.
+
+---
+
+### 4. API Endpoints
+
+The backend exposes the following REST resource endpoints:
+
+#### 📂 Category Endpoints
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/categories` | Fetch all category catalog groups |
+| `GET` | `/api/categories/{id}` | Fetch category details by ID |
+| `POST` | `/api/categories` | Create new category (payload validated) |
+| `PUT` | `/api/categories/{id}` | Update category name |
+| `DELETE` | `/api/categories/{id}` | Delete category, cascade products, reset IDs |
+
+#### 📦 Product Endpoints
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/products` | Fetch all database products (unpaginated list) |
+| `GET` | `/api/products/{id}` | Fetch detailed product card info by ID |
+| `POST` | `/api/products` | Create new product card item (payload validated) |
+| `PUT` | `/api/products/{id}` | Update product parameters |
+| `DELETE` | `/api/products/{id}` | Remove product and reset sequence index |
+| `GET` | `/api/products/search` | Paginated search (keywords, category filters, sorting) |
+
+##### Search Parameter Specs
+- `keyword` (Optional): Matches product names and descriptions.
+- `categoryId` (Optional): Filters results to a specific category.
+- `page` (Optional, Default: `0`): Page index.
+- `size` (Optional, Default: `10`): Items per page.
+- `sortBy` (Optional, Default: `createdAt`): Sorting column.
+- `direction` (Optional, Default: `asc`): Sorting direction (`asc` / `desc`).
+
+---
+
+## 📁 Project Directory Structure
 
 ```
 Product Search System/
@@ -189,4 +241,5 @@ Product Search System/
 
 ## 🔒 Authors & Maintainers
 Developed and maintained by **Arpit**.
+
 
