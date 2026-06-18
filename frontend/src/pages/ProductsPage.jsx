@@ -10,7 +10,7 @@ import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import LoadingSpinner from '../components/LoadingSpinner';
 import productService from '../services/productService';
 import { LayoutGrid, List, Plus, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
-import { SORT_OPTIONS, DIRECTION_OPTIONS, PAGE_SIZES, DEFAULT_PAGE_SIZE } from '../utils/constants';
+import { SORT_OPTIONS, PAGE_SIZES, DEFAULT_PAGE_SIZE } from '../utils/constants';
 import toast from 'react-hot-toast';
 
 export default function ProductsPage() {
@@ -103,7 +103,6 @@ export default function ProductsPage() {
       await productService.delete(productToDelete.id);
       toast.success('Product deleted successfully!');
       setProductToDelete(null);
-      // If we are on a page where there is only one element and it was deleted, go back a page
       const isLastItemOnPage = searchResult.products.length === 1;
       const targetPage = isLastItemOnPage && searchResult.currentPage > 0 
         ? searchResult.currentPage - 1 
@@ -116,14 +115,15 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
+      
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight my-0">
+          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight my-0">
             Products Catalog
           </h1>
-          <p className="text-slate-500 text-sm mt-1">
-            Browse, manage, filter, and modify products in your system database.
+          <p className="text-slate-400 text-xs sm:text-sm mt-1">
+            Browse, manage, and modify raw database records in the product repository.
           </p>
         </div>
 
@@ -132,26 +132,26 @@ export default function ProductsPage() {
             setSelectedProduct(null);
             setIsFormOpen(true);
           }}
-          className="flex items-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-lg transition shadow-lg shadow-indigo-600/20"
+          className="flex items-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-indigo-600/10 border border-indigo-500/20 cursor-pointer"
         >
-          <Plus className="w-4.5 h-4.5" />
+          <Plus className="w-4 h-4" />
           <span>Add Product</span>
         </button>
       </div>
 
       {/* Control Panel (Filters, Sort, Views) */}
-      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+      <div className="glass-panel p-5 rounded-2xl shadow-md space-y-4 border-white/5">
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 justify-between">
-          <SearchBar value={keyword} onSearch={handleSearch} placeholder="Search products by name..." />
+          <SearchBar value={keyword} onSearch={handleSearch} placeholder="Search product catalogs..." />
           
           <div className="flex flex-wrap items-center gap-3">
             {/* Category Filter */}
             <div className="flex items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4 text-slate-400" />
+              <SlidersHorizontal className="w-4 h-4 text-slate-500" />
               <select
                 value={categoryId}
                 onChange={handleCategoryChange}
-                className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                className="bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-xs font-semibold text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               >
                 <option value="">All Categories</option>
                 {categories.map((c) => (
@@ -167,7 +167,7 @@ export default function ProductsPage() {
               <select
                 value={sortBy}
                 onChange={handleSortChange}
-                className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                className="bg-slate-900 border border-white/10 rounded-lg px-3 py-2 text-xs font-semibold text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               >
                 {SORT_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -178,7 +178,7 @@ export default function ProductsPage() {
               
               <button
                 onClick={handleDirectionToggle}
-                className="p-2 border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors text-slate-600"
+                className="p-2 border border-white/10 bg-slate-900/50 hover:bg-white/5 rounded-lg transition-colors text-slate-400 hover:text-white cursor-pointer"
                 title={`Sort ${direction === 'asc' ? 'Descending' : 'Ascending'}`}
               >
                 <ArrowUpDown className="w-4 h-4" />
@@ -186,43 +186,43 @@ export default function ProductsPage() {
             </div>
 
             {/* View Mode Toggle */}
-            <div className="border-l border-slate-200 pl-3 flex items-center bg-slate-100 rounded-lg p-1">
+            <div className="border-l border-white/10 pl-3 flex items-center bg-slate-900/60 rounded-xl p-1 border border-white/5">
               <button
                 onClick={() => setViewMode('table')}
-                className={`p-1.5 rounded ${
-                  viewMode === 'table' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'
+                className={`p-1.5 rounded-lg ${
+                  viewMode === 'table' ? 'bg-white/10 text-indigo-400 shadow-sm' : 'text-slate-400 hover:text-white'
                 }`}
                 title="Table View"
               >
-                <List className="w-4.5 h-4.5" />
+                <List className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-1.5 rounded ${
-                  viewMode === 'grid' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'
+                className={`p-1.5 rounded-lg ${
+                  viewMode === 'grid' ? 'bg-white/10 text-indigo-400 shadow-sm' : 'text-slate-400 hover:text-white'
                 }`}
                 title="Grid View"
               >
-                <LayoutGrid className="w-4.5 h-4.5" />
+                <LayoutGrid className="w-4 h-4" />
               </button>
             </div>
           </div>
         </div>
 
         {/* Page size configuration */}
-        <div className="flex items-center justify-between text-xs text-slate-400 border-t border-slate-100 pt-3">
-          <span>
-            {searchResult.totalElements} products found.
+        <div className="flex items-center justify-between text-xs text-slate-400 border-t border-white/5 pt-3">
+          <span className="font-semibold text-slate-400">
+            {searchResult.totalElements} products cataloged.
           </span>
           <div className="flex items-center gap-2">
             <span>Show per page:</span>
             <select
               value={pageSize}
               onChange={handlePageSizeChange}
-              className="bg-transparent border-none text-slate-500 font-semibold cursor-pointer focus:outline-none"
+              className="bg-transparent border-none text-slate-300 font-bold cursor-pointer focus:outline-none"
             >
               {PAGE_SIZES.map((sz) => (
-                <option key={sz} value={sz}>
+                <option key={sz} value={sz} className="bg-slate-950">
                   {sz} rows
                 </option>
               ))}
@@ -233,13 +233,13 @@ export default function ProductsPage() {
 
       {/* Main Content Area */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+        <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-xl text-xs font-semibold flex items-center gap-2">
           <span>Error: {error}</span>
         </div>
       )}
 
       {loading ? (
-        <LoadingSpinner message="Fetching matching products..." />
+        <div className="py-12 flex justify-center"><LoadingSpinner message="Fetching matching products..." /></div>
       ) : (
         <>
           {viewMode === 'table' ? (
@@ -261,9 +261,9 @@ export default function ProductsPage() {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 bg-white rounded-xl border border-slate-200 text-slate-400">
-                <LayoutGrid className="w-12 h-12 text-slate-300 mb-3" />
-                <h3 className="text-lg font-medium text-slate-800">No products found</h3>
+              <div className="flex flex-col items-center justify-center py-16 bg-slate-900/40 rounded-xl border border-white/5 text-slate-400 shadow-md">
+                <LayoutGrid className="w-12 h-12 text-slate-500 mb-3 animate-pulse" />
+                <h3 className="text-lg font-bold text-white my-0">No products found</h3>
               </div>
             )
           )}

@@ -1,27 +1,83 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+/* Keyframe animations for premium animated gradients and orbs */
+@keyframes gradientBg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes orbFloat {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(35px, -60px) scale(1.15); }
+  66% { transform: translate(-25px, 25px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-gradient-bg {
+  background-size: 400% 400%;
+  animation: gradientBg 25s ease infinite;
+}
+
+.animate-orb-1 {
+  animation: orbFloat 22s ease-in-out infinite;
+}
+
+.animate-orb-2 {
+  animation: orbFloat 28s ease-in-out infinite 2s;
+}
+
+.animate-orb-3 {
+  animation: orbFloat 20s ease-in-out infinite 4s;
+}
+
+/* Global Dark SaaS Scrollbars and Body default properties */
 body {
-  background-color: #f8fafc;
-  color: #475569;
+  background-color: #020617;
+  color: #f8fafc;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* Custom Scrollbar styling */
+/* Glassmorphism Design System Utilities */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 10px 40px -10px rgba(99, 102, 241, 0.2);
+}
+
+/* Custom Webkit Scrollbars for premium dark feel */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(15, 23, 42, 0.3);
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(99, 102, 241, 0.4);
 }
