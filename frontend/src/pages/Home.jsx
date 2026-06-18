@@ -76,7 +76,7 @@ export default function Home() {
         </p>
 
         {/* Big Centered Search Bar */}
-        <div className="pt-4 flex justify-center">
+        <div className="pt-4 flex justify-center relative z-20">
           <div className="w-full max-w-2xl shadow-2xl shadow-indigo-950/20 hover:shadow-indigo-950/30 transition-shadow">
             <SearchBar
               onSearch={handleSearchSubmit}

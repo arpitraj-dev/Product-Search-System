@@ -180,7 +180,7 @@ export default function SearchPage() {
     <div className="space-y-8 animate-in fade-in duration-500 pb-12">
       
       {/* Centered Large Premium Search Hero Header */}
-      <div className="glass-panel backdrop-blur-xl border border-white/5 -mx-4 sm:-mx-8 p-12 sm:p-16 text-white flex flex-col items-center justify-center gap-6 relative overflow-hidden rounded-2xl sm:rounded-none shadow-2xl">
+      <div className="glass-panel backdrop-blur-xl border border-white/5 -mx-4 sm:-mx-8 p-12 sm:p-16 text-white flex flex-col items-center justify-center gap-6 relative z-20 rounded-2xl sm:rounded-none shadow-2xl">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-indigo-500/10 blur-[110px] rounded-full pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950/20 via-slate-950/40 to-slate-950/60 pointer-events-none" />
 

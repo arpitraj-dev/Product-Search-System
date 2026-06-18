@@ -140,7 +140,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Control Panel (Filters, Sort, Views) */}
-      <div className="glass-panel p-5 rounded-2xl shadow-md space-y-4 border-white/5">
+      <div className="glass-panel p-5 rounded-2xl shadow-md space-y-4 border-white/5 relative z-20">
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 justify-between">
           <SearchBar value={keyword} onSearch={handleSearch} placeholder="Search product catalogs..." />
           
