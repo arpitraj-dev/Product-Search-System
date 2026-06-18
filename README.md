@@ -223,6 +223,27 @@ Product Search System/
 
 ---
 
+## Screenshots
+
+| Home Dashboard | Product Search |
+| :---: | :---: |
+| ![Home Dashboard](frontend/screenshots/Home%20Dashboard.jpeg) | ![Product Search](frontend/screenshots/Product%20Search.jpeg) |
+
+| Product Discovery | Featured Products |
+| :---: | :---: |
+| ![Product Discovery](frontend/screenshots/Product%20Discovery.jpeg) | ![Featured Products](frontend/screenshots/Featured%20Products.jpeg) |
+
+| Product Management | Category Management |
+| :---: | :---: |
+| ![Product Management](frontend/screenshots/Product%20Management.jpeg) | ![Category Management](frontend/screenshots/Category%20Management.jpeg) |
+
+| Add Product | Delete Product |
+| :---: | :---: |
+| ![Add Product](frontend/screenshots/Add%20Product.jpeg) | ![Delete Product](frontend/screenshots/Delete%20Product.jpeg) |
+
+
+---
+
 ## 📝 Project Features Implementation Checklist
 
 | Feature | Implementation Details | Files Reference |
